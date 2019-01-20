@@ -6,7 +6,7 @@ Spell Checker in Python
 Use
 ----
 Cloning and Running Program
-<pre><code>git clone https://github.com/jacks205/Spell-Check.git
+<pre><code>git clone https://github.com/Siddhantswain25/Spell-Check.git
 cd Spell-Check
 make 0 or make 1</code></pre>
 
