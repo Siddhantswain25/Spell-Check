@@ -27,7 +27,7 @@ The algorithm used has 3 parts:
 + The offset probability of the user typing word, x, but initially meant word, y
 + Iteration of all possible outputs, and choosing a word which has the best probability
 
-My altered algorithm used is faster than <code>O(n)</code> because I shortened the list of possible words based on the first letter. By creating a dictionary ordered by letter, the run time of the program would range closer to <code>O(1/26*n)</code>, where <code>n</code> is the number of words, and <code>1/26</code> stands for the alphabet. If n is a 
+The altered algorithm used is faster than <code>O(n)</code> because I shortened the list of possible words based on the first letter. By creating a dictionary ordered by letter, the run time of the program would range closer to <code>O(1/26*n)</code>, where <code>n</code> is the number of words, and <code>1/26</code> stands for the alphabet. If n is a 
 
 
 Main Challenge
