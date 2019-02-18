@@ -1,18 +1,18 @@
 import re, random
 class Misspell:
-	#Give list of words to mispell
+	# List of words to mispell
 	def __init__(self, wordList):
 		self.wList = wordList
 
 	def genWord(self):
 		return self.misspelled(self.wList[random.randint(0,len(self.wList)-1)])
 
-# Mispelling a word based on these types of incorrections while typing
-#	-deletion (deletes)
-# 	-swapping adajent letters (transposes)
-#	-alteration (replaces)
-#	-inserting a letter (inserts)
-	#Returns a word mispelled
+	# Mispelling a word based on these types of incorrections while typing
+	#	-deletion (deletes)
+	# 	-swapping adajent letters (transposes)
+	#	-alteration (replaces)
+	#	-inserting a letter (inserts)
+	# Returns a word mispelled
 	def misspelled(self, word):
 		if len(word) == 1:
 			return word
@@ -33,8 +33,8 @@ class Misspell:
 				rNum = random.randint(1,10)
 			else:
 				rNum = 5
-			# if rNum == 1:
-				#Do nothing...'Deletion'
+			#if rNum == 1:
+				#Do nothing...('Deletion')
 			if rNum == 2:
 				#Swapping adjacent letters
 				newWord = newWord[:len(newWord)-2] + i + prev
@@ -57,10 +57,10 @@ class Misspell:
 			newWord += prev
 		return newWord
 
-# def words(text): 
-# 	return re.findall('[a-z]+', text.lower()) 
+def words(text):
+ 	return re.findall('[a-z]+', text.lower())
 
-# lWords = words(file('/usr/share/dict/words').read())
+lWords = words(open('/usr/share/dict/words').read())
 
-# miss = Misspelled(lWords)
-# print miss.genWord()
+miss = Misspelled(lWords)
+print (miss.genWord())
