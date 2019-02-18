@@ -1,17 +1,12 @@
+#The algorithm used has 3 parts:
+#1. The probability of the typed word being correctly typed by the user
+#2. The offset probability of the user typing word, x, but initially meant word, y
+#3. Iteration of all possible outputs, and choosing a word which has the best probability
+
 import re, collections, sys
-from misspell import Misspell
-# re - Python Library for Regular Expressions
-# collections - Python Library for High Performance Container Datatypes
 
-# Spell Check program using algorithm originally
-# summarized by Dr. Peter Norvig.
-# 	src: http://norvig.com/spell-correct.html
-# 	additional src: http://goo.gl/uaJ6DQ (Google)
+from pip._vendor.distlib.compat import raw_input
 
-# The algorithm used has 3 parts:
-# 	-The probability of the typed word being correctly typed by the user
-# 	-The offset probability of the user typing word, x, but initially meant word, y
-# 	-Iteration of all possible outputs, and choosing a word which has the best probability
 
 class SpellCheck:
 
@@ -21,9 +16,9 @@ class SpellCheck:
 		self.dictPath = path
 
 	# Returning the words in a list as lower case and defining a word as a list of alphabetic character
-	# Works because the singular version of a word is more probably than the possessive notation (dog, dog's)
 	def words(self, text): 
 		return re.findall('[a-z]+', text.lower()) 
+
 
 	#Returning dictionary = {'a':{abbey:1, abbreviated:2}, 'b':{},...,'z':{}}
 	#Instead of iterating through the whole dictionary, iteration happens based on first letter
@@ -35,8 +30,8 @@ class SpellCheck:
 			occurences[w[0]][w] += 1 #Incrementing occurence of word
 		return occurences
 
-	#Edits can be deletion (deletes), swapping adajent letters (transposes), alteration (replaces), or inserting a letter (inserts)
-	#Returns a set of of all words one edit away from correct word
+	# Edits can be deletion (deletes), swapping adajent letters (transposes), alteration (replaces), or inserting a letter (inserts)
+	# Returns a set of of all words one edit away from correct word
 	def edits1(self, word):
 		splits = [(word[:i], word[i:]) for i in range(len(word) + 1)]
 		deletes = [a + b[1:] for a, b in splits if b]
@@ -50,19 +45,17 @@ class SpellCheck:
 		return set(e2 for e1 in self.edits1(word) for e2 in self.edits1(e1) if e2 in wDict)
 
 	#A known word is most likely to be a word that has a vowel mistyped rather than 2 consonants, probable correct first letter, edit distances of around 1 or 2
-	def known(self, word, wDict): 
+	def known(self, word, wDict):
 		return set(w for w in word if w in wDict)
 
-	# Highest Level Method
 	# Returns the possible word
 	def correct(self, word, wDict):
-		candidates = self.known([word], wDict[word[0]]) or self.known(self.edits1(word), wDict[word[0]]) or self.known_edits2(word, wDict[word[0]]) or [word] # gets a set of words with the shortest edit distance from the typed word.
-		return max(candidates, key=wDict.get) # returning the element of the set with the highest probability of being the correct word
-
-	
+		candidates = self.known([word], wDict[word[0]]) or self.known(self.edits1(word), wDict[word[0]]) or self.known_edits2(word, wDict[word[0]]) or [word]# gets a set of words with the shortest edit distance from the typed word
+		# returning the element of the set with the highest probability of being the correct word
+		return max(candidates, key=wDict.get)
 
 	def run(self, option):
-		lWords = self.words(file(self.dictPath).read())
+		lWords = self.words(open(self.dictPath).read())
 		try:
 			if option == '0':
 				lWords = self.train(lWords)
@@ -72,25 +65,24 @@ class SpellCheck:
 						continue
 					spellchk = self.correct(word.lower(), lWords)
 					if spellchk == word and spellchk not in lWords[word[0]]:
-						print 'NO SUGGESTION'
+						print ('NO SUGGESTION')
 					else:
-						print spellchk
-					print #'\n'
+						print (spellchk)
+					print ('\n')
 			elif option == '1':
 				misspell = Misspell(lWords)
 				lWords = self.train(lWords)
 				while True:
 					word = misspell.genWord()
-					print 'Incorrect -', word
+					print ('Incorrect -', word)
 					spellchk = self.correct(word, lWords)
 					if spellchk == word and spellchk not in lWords[word[0]]:
-						print 'NO SUGGESTION'
+						print ('NO SUGGESTION')
 					else:
-						print 'Correct   -',spellchk
-					print #'\n'
-					raw_input('<enter>\n') #Enter to continue
-		except KeyboardInterrupt: 
-			#Cleaner way to exit program without a crash
+						print ('Correct   -',spellchk)
+					print ('\n')
+					raw_input('<enter>\n')
+		except KeyboardInterrupt:
 			'exit'
 		except EOFError:
 			'exit'
